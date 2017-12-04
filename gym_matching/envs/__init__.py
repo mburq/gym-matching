@@ -1,1 +1,1 @@
-from gym_matching.envs.matching_env import MatchingEnv
+from gym_matching.envs.matching_env import TypeMatchingEnv
