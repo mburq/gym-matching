@@ -29,4 +29,8 @@ def gurobi_max_weight_matching(matrix, state, S, vertex_discount=None):
     m.update()
     m.params.OutputFlag = 0
     m.optimize()
-    return (np.array([x[(i)].x for i in range(S)]).astype(int), m.objVal)
+    matching = np.array([[x[(i, j)].x if i < j else 0 for j in range(S)] for i in range(S)])
+    # m.objVal
+    reward = np.sum(np.multiply(matrix, matching))
+    matched = np.array([x[(i)].x for i in range(S)]).astype(int)
+    return (matched, reward)
