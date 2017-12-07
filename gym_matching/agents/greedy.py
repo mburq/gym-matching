@@ -8,7 +8,7 @@ from collections import deque
 
 
 def run(env_id, seed, evaluation, nb_epochs, nb_rollout_steps):
-    assert env_id == 'Matching-v2'  # only works for shadow prices env.
+    assert env_id in ['Matching-v2', 'Matching-v3']  # only works for shadow prices env.
     env = gym.make(env_id)
     start_time = time.time()
     obs = env.reset()
@@ -25,8 +25,8 @@ def run(env_id, seed, evaluation, nb_epochs, nb_rollout_steps):
 
     for epoch in range(nb_epochs):
         for t_rollout in range(nb_rollout_steps):
-            # action = -10 * np.ones(action_shape)
-            action = np.array([-5, -5, -5, -5, -5, -10, -10, -10, -10, -10])
+            action = 0 * np.ones(action_shape)
+            # action = np.array([1, 1, 1, 1, 1, 0, 0, 0, 0, 0])
             new_obs, r, done, info = env.step(action)
             t += 1
             episode_reward += r
@@ -44,17 +44,18 @@ def run(env_id, seed, evaluation, nb_epochs, nb_rollout_steps):
                 epoch_episodes += 1
                 episodes += 1
                 obs = env.reset()
-        print(np.mean(epoch_episode_rewards))
+                break
+    print("Mean reward: {}".format(np.mean(epoch_episode_rewards)))
     print(time.time() - start_time)
 
 
 def parse_args():
     parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-    parser.add_argument('--env-id', type=str, default='Matching-v2')
+    parser.add_argument('--env-id', type=str, default='Matching-v3')
     parser.add_argument('--seed', help='RNG seed', type=int, default=0)
-    parser.add_argument('--nb_epochs', type=int, default=100)
+    parser.add_argument('--nb_epochs', type=int, default=5)
     boolean_flag(parser, 'evaluation', default=True)
-    parser.add_argument('--nb-rollout-steps', type=int, default=100)
+    parser.add_argument('--nb-rollout-steps', type=int, default=1000)
     args = parser.parse_args()
     dict_args = vars(args)
     return dict_args

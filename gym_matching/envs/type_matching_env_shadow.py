@@ -10,8 +10,8 @@ class TypeMatchingEnvShadow(gym.Env):
 
     def __init__(self):
         self.num_types = 10
-        self.observation_space = spaces.Box(low=0, high=100, shape=(self.num_types,))
-        self.action_space = spaces.Box(low=-10, high=10, shape=(self.num_types,))
+        self.observation_space = spaces.Box(low=0, high=20, shape=(self.num_types,))
+        self.action_space = spaces.Box(low=-11, high=11, shape=(self.num_types,))
         # TODO: make the low, high depend on max weight in type graph?
         # (m, a, d) = random_graph(self.num_types)
         (m, a, d) = bomb_graph(self.num_types)
@@ -21,12 +21,10 @@ class TypeMatchingEnvShadow(gym.Env):
 
     def _step(self, action):
         assert self.action_space.contains(action), "{} ({}) invalid".format(action, type(action))
-        if np.all(action <= self.state):
-            act = np.add(action, 10)  # Shadow prices are in [0,1].
-            (matches, reward) = gurobi_max_weight_matching(self.matrix, self.state, self.num_types, act)
-            self.state -= matches
-        else:
-            reward = 0
+        act = np.add(action, 0)  # Shadow prices are in [0,1].
+        (matches, reward) = gurobi_max_weight_matching(self.matrix, self.state, self.num_types, act)
+        self.state -= matches
+
         self._new_departures()
         self._new_arrivals()
         self.status = self.time_steps_remaining <= 0
@@ -36,7 +34,7 @@ class TypeMatchingEnvShadow(gym.Env):
     def _reset(self):
         self.state = np.zeros(self.num_types)
         self.reward = 0
-        self.time_steps_remaining = 100
+        self.time_steps_remaining = 500
         return self.state
 
     def _new_arrivals(self):

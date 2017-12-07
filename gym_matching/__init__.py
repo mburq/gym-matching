@@ -19,7 +19,15 @@ register(
 register(
     id='Matching-v2',
     entry_point='gym_matching.envs:TypeMatchingEnvShadow',
-    timestep_limit=100,
+    timestep_limit=500,
+    reward_threshold=1.0,
+    nondeterministic=True,
+    )
+
+register(
+    id='Matching-v3',
+    entry_point='gym_matching.envs:KidneyMatchingEnv',
+    timestep_limit=500,
     reward_threshold=1.0,
     nondeterministic=True,
     )

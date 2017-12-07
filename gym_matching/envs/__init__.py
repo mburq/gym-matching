@@ -1,3 +1,4 @@
 from gym_matching.envs.type_matching_env_disc import TypeMatchingEnvDiscrete
 from gym_matching.envs.type_matching_env_cont import TypeMatchingEnvContinuous
 from gym_matching.envs.type_matching_env_shadow import TypeMatchingEnvShadow
+from gym_matching.envs.kidney_matching import KidneyMatchingEnv
