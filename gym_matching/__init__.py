@@ -15,3 +15,11 @@ register(
     reward_threshold=1.0,
     nondeterministic=True,
     )
+
+register(
+    id='Matching-v2',
+    entry_point='gym_matching.envs:TaxiMatchingEnv',
+    timestep_limit=200,
+    reward_threshold=10,
+    nondeterministic=True,
+    )
